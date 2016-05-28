@@ -50,6 +50,16 @@ var alerts = require('markdown-it-alerts');
 md().use(alerts, {links: false});
 ```
 
+Enable/disable adding a matching glyphicon to alerts.
+
+```js
+var md = require('markdown-it');
+var alerts = require('markdown-it-alerts');
+
+md().use(alerts, {icons: true});
+```
+
+Note that this option adds extra markup that must be accommodated by your CSS.
 
 ### Example
 
@@ -71,6 +81,32 @@ Gets converted to:
 <p>This is a test. <a href="#">Link</a>.</p>
 <div class="alert alert-success" role="alert">
 <p>Hello world! <a href="#" class="alert-link">Link</a>.</p>
+</div>
+<p>This is a test. <a href="#">Link</a>.</p>
+```
+
+With option `icons` enabled (not default):
+
+```md
+This is a test. [Link](#).
+
+::: warning
+Uh-oh! [Link](#).
+:::
+
+This is a test. [Link](#).
+```
+
+Gets converted to:
+
+```html
+<p>This is a test. <a href="#">Link</a>.</p>
+<div class="alert alert-warning" role="alert">
+<div class="alert-inner">
+<div class="alert-icon"><span class="glyphicon glyphicon-alert" aria-hidden="true"></span></div>
+<div class="alert-message"><p>Uh-oh! <a href="#" class="alert-link">Link</a>.</p>
+</div>
+</div>
 </div>
 <p>This is a test. <a href="#">Link</a>.</p>
 ```

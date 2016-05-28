@@ -1,6 +1,6 @@
 {
   "name": "markdown-it-alerts",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Markdown-it plugin to create Bootstrap alerts",
   "main": "index.js",
   "scripts": {
@@ -20,6 +20,12 @@
     "name": "Nuno Freitas",
     "email": "nunofreitas@gmail.com"
   },
+  "contributors": [
+    {
+      "name": "Jacob Childress",
+      "email": "jacobc@gmail.com"
+    }
+  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/nunof07/markdown-it-alerts/issues"
