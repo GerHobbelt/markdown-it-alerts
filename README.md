@@ -4,9 +4,13 @@
 For example:
 
 ```md
+
 ::: vtrans devanagari
-shri rAma rAmeti ||
+  
+  shri rAma rAmeti ||
+  
 :::
+
 ```
 
 Gets converted to:
@@ -14,7 +18,7 @@ Gets converted to:
 ```html
 <div class="vtrans vtrans-devanagari">
 
-  श्री राम रामेति ॥
+  <p> श्री राम रामेति ॥ </p>
 
 </div>
 ```
