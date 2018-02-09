@@ -1,0 +1,32 @@
+{
+  "name": "markdown-it-vtrans",
+  "version": "1.0.0",
+  "description": "Markdown-it plugin for supporting indic scripts via ITRANS.",
+  "main": "index.js",
+  "files": [
+    "index",
+    "sanscript"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vipranarayan14/markdown-it-vtrans.git"
+  },
+  "keywords": [
+    "markdown-it-plugin",
+    "markdown-it",
+    "markdown",
+    "itrans"
+  ],
+  "author": "Prasanna Venkatesh T S <vipranarayan14@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/vipranarayan14/markdown-it-vtrans/issues"
+  },
+  "homepage": "https://github.com/vipranarayan14/markdown-it-vtrans#readme",
+  "dependencies": {
+    "markdown-it-container": "^2.0.0"
+  }
+}
