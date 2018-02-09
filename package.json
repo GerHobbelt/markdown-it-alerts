@@ -4,8 +4,8 @@
   "description": "Markdown-it plugin for supporting indic scripts via ITRANS.",
   "main": "index.js",
   "files": [
-    "index",
-    "sanscript"
+    "index.js",
+    "sanscript.js"
   ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
