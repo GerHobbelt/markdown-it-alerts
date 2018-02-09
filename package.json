@@ -1,6 +1,6 @@
 {
   "name": "markdown-it-vtrans",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Markdown-it plugin for supporting indic scripts via ITRANS.",
   "main": "index.js",
   "files": [
