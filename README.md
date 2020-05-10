@@ -1,4 +1,5 @@
 # markdown-it-alerts
+
 [Markdown-it][markdown-it] plugin to create [Bootstrap alerts][bootstrap-alerts].
 
 E.g.:

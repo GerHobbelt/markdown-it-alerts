@@ -1,23 +1,20 @@
-/*! markdown-it-container 2.0.0 https://github.com//markdown-it/markdown-it-container @license MIT */(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.markdownitContainer = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 // Process block-level custom containers
-//
-'use strict';
 
 
-module.exports = function container_plugin(md, name, options) {
+var markdownItContainer = function container_plugin(md, name, options) {
 
   function validateDefault(params) {
     return params.trim().split(' ', 2)[0] === name;
   }
 
-  function renderDefault(tokens, idx, _options, env, self) {
+  function renderDefault(tokens, idx, _options, env, _self) {
 
     // add a class to the opening tag
     if (tokens[idx].nesting === 1) {
       tokens[idx].attrPush([ 'class', name ]);
     }
 
-    return self.renderToken(tokens, idx, _options, env, self);
+    return _self.renderToken(tokens, idx, _options, env, _self);
   }
 
   options = options || {};
@@ -143,5 +140,55 @@ module.exports = function container_plugin(md, name, options) {
   md.renderer.rules['container_' + name + '_close'] = render;
 };
 
-},{}]},{},[1])(1)
-});
+var markdownItAlerts = function alerts_plugin(md, options) {
+  let containerOpenCount = 0;
+  let links = options ? options.links : true;
+
+  function setupContainer(name) {
+    md.use(markdownItContainer, name, {
+      render: function (tokens, idx) {
+        if (tokens[idx].nesting === 1) {
+          containerOpenCount += 1;
+          return '<div class="alert alert-' + name + '" role="alert">\n';
+        }
+        containerOpenCount -= 1;
+        return '</div>\n';
+      }
+    });
+  }
+
+  function isContainerOpen() {
+    return containerOpenCount > 0;
+  }
+
+  function selfRender(tokens, idx, options, env, self) {
+    return self.renderToken(tokens, idx, options);
+  }
+
+  function setupLinks() {
+    let defaultRender = md.renderer.rules.link_open || selfRender;
+
+    md.renderer.rules.link_open = function (tokens, idx, options, env, self) {
+      if (isContainerOpen()) {
+        tokens[idx].attrPush([ 'class', 'alert-link' ]);
+      }
+
+      return defaultRender(tokens, idx, options, env, self);
+    };
+  }
+
+  function init() {
+    setupContainer('success');
+    setupContainer('info');
+    setupContainer('warning');
+    setupContainer('danger');
+
+    if (links) {
+      setupLinks();
+    }
+  }
+
+  init();
+};
+
+export default markdownItAlerts;
