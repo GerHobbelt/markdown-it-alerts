@@ -142,17 +142,41 @@ var markdownItContainer = function container_plugin(md, name, options) {
 
 var markdownItAlerts = function alerts_plugin(md, options) {
   let containerOpenCount = 0;
-  let links = options ? options.links : true;
+  let links = 'links' in (options || {}) ? options.links : true;
+  let icons = 'icons' in (options || {}) ? options.icons : false;
+
+  function icon(name) {
+    switch (name) {
+    case 'warning':
+      return 'glyphicon glyphicon-alert';
+    case 'danger':
+      return 'glyphicon glyphicon-remove-sign';
+    default:
+      return 'glyphicon glyphicon-info-sign';
+    }
+  }
 
   function setupContainer(name) {
     md.use(markdownItContainer, name, {
       render: function (tokens, idx) {
+        let html;
         if (tokens[idx].nesting === 1) {
           containerOpenCount += 1;
-          return '<div class="alert alert-' + name + '" role="alert">\n';
+          html = '<div class="alert alert-' + name + '" role="alert">\n';
+          if (icons) {
+            html += '<div class="alert-inner">\n';
+            html += '<div class="alert-icon"><span class="' + icon(name) +
+              '" aria-hidden="true"></span></div>\n';
+            html += '<div class="alert-message">';
+          }
+          return html;
         }
         containerOpenCount -= 1;
-        return '</div>\n';
+        html = '</div>\n';
+        if (icons) {
+          html += '</div>\n</div>\n';
+        }
+        return html;
       }
     });
   }
