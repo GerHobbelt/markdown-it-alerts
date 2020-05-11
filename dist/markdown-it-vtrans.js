@@ -1,3 +1,192 @@
+/*! markdown-it-vtrans 1.0.1-1 https://github.com//GerHobbelt/markdown-it-vtrans @license MIT */
+
+(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.markdownitVtrans = f()}})(function(){var define,module,exports;return (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
+'use strict';
+
+const container = require('@gerhobbelt/markdown-it-container');
+const Sanscript = require('./sanscript');
+
+const isInSanscriptSchemes = vtransScheme => [
+  'bengali',
+  'devanagari',
+  'gujarati',
+  'gurmukhi',
+  'kannada',
+  'malayalam',
+  'oriya',
+  'tamil',
+  'telugu'
+].indexOf(vtransScheme) > -1;
+
+module.exports = function vtrans_plugin(md, options) {
+  md.use(container, 'vtrans', {
+    render: function (tokens, idx) {
+      const openingTag = 1;
+      const isOpeningTag = tokens[idx].nesting === openingTag;
+      const containerInfo = tokens[idx].info;
+      const getScheme = containerInfo.match(/^\svtrans\s(.*)$/);
+      const vtransScheme = (getScheme) ? getScheme[1] : '';
+
+      if (isOpeningTag && isInSanscriptSchemes(vtransScheme)) {
+
+        md.renderer.rules.text = (tokens, idx) =>
+          `${Sanscript.t(tokens[idx].content, 'itrans_dravidian', vtransScheme)}`;
+
+        return `<div class="vtrans vtrans-${vtransScheme}">\n`;
+      }
+      return '</div>\n';
+
+    }
+  });
+
+};
+
+},{"./sanscript":3,"@gerhobbelt/markdown-it-container":2}],2:[function(require,module,exports){
+// Process block-level custom containers
+//
+'use strict';
+
+
+module.exports = function container_plugin(md, name, options) {
+
+  function validateDefault(params) {
+    return params.trim().split(' ', 2)[0] === name;
+  }
+
+  function renderDefault(tokens, idx, _options, env, _self) {
+
+    // add a class to the opening tag
+    if (tokens[idx].nesting === 1) {
+      tokens[idx].attrPush([ 'class', name ]);
+    }
+
+    return _self.renderToken(tokens, idx, _options, env, _self);
+  }
+
+  options = options || {};
+
+  var min_markers = 3,
+      marker_str  = options.marker || ':',
+      marker_char = marker_str.charCodeAt(0),
+      marker_len  = marker_str.length,
+      validate    = options.validate || validateDefault,
+      render      = options.render || renderDefault;
+
+  function container(state, startLine, endLine, silent) {
+    var pos, nextLine, marker_count, markup, params, token,
+        old_parent, old_line_max,
+        auto_closed = false,
+        start = state.bMarks[startLine] + state.tShift[startLine],
+        max = state.eMarks[startLine];
+
+    // Check out the first character quickly,
+    // this should filter out most of non-containers
+    //
+    if (marker_char !== state.src.charCodeAt(start)) { return false; }
+
+    // Check out the rest of the marker string
+    //
+    for (pos = start + 1; pos <= max; pos++) {
+      if (marker_str[(pos - start) % marker_len] !== state.src[pos]) {
+        break;
+      }
+    }
+
+    marker_count = Math.floor((pos - start) / marker_len);
+    if (marker_count < min_markers) { return false; }
+    pos -= (pos - start) % marker_len;
+
+    markup = state.src.slice(start, pos);
+    params = state.src.slice(pos, max);
+    if (!validate(params)) { return false; }
+
+    // Since start is found, we can report success here in validation mode
+    //
+    if (silent) { return true; }
+
+    // Search for the end of the block
+    //
+    nextLine = startLine;
+
+    for (;;) {
+      nextLine++;
+      if (nextLine >= endLine) {
+        // unclosed block should be autoclosed by end of document.
+        // also block seems to be autoclosed by end of parent
+        break;
+      }
+
+      start = state.bMarks[nextLine] + state.tShift[nextLine];
+      max = state.eMarks[nextLine];
+
+      if (start < max && state.sCount[nextLine] < state.blkIndent) {
+        // non-empty line with negative indent should stop the list:
+        // - ```
+        //  test
+        break;
+      }
+
+      if (marker_char !== state.src.charCodeAt(start)) { continue; }
+
+      if (state.sCount[nextLine] - state.blkIndent >= 4) {
+        // closing fence should be indented less than 4 spaces
+        continue;
+      }
+
+      for (pos = start + 1; pos <= max; pos++) {
+        if (marker_str[(pos - start) % marker_len] !== state.src[pos]) {
+          break;
+        }
+      }
+
+      // closing code fence must be at least as long as the opening one
+      if (Math.floor((pos - start) / marker_len) < marker_count) { continue; }
+
+      // make sure tail has spaces only
+      pos -= (pos - start) % marker_len;
+      pos = state.skipSpaces(pos);
+
+      if (pos < max) { continue; }
+
+      // found!
+      auto_closed = true;
+      break;
+    }
+
+    old_parent = state.parentType;
+    old_line_max = state.lineMax;
+    state.parentType = 'container';
+
+    // this will prevent lazy continuations from ever going past our end marker
+    state.lineMax = nextLine;
+
+    token        = state.push('container_' + name + '_open', 'div', 1);
+    token.markup = markup;
+    token.block  = true;
+    token.info   = params;
+    token.map    = [ startLine, nextLine ];
+
+    state.md.block.tokenize(state, startLine + 1, nextLine);
+
+    token        = state.push('container_' + name + '_close', 'div', -1);
+    token.markup = state.src.slice(start, pos);
+    token.block  = true;
+
+    state.parentType = old_parent;
+    state.lineMax = old_line_max;
+    state.line = nextLine + (auto_closed ? 1 : 0);
+
+    return true;
+  }
+
+  md.block.ruler.before('fence', 'container_' + name, container, {
+    alt: [ 'paragraph', 'reference', 'blockquote', 'list' ]
+  });
+  md.renderer.rules['container_' + name + '_open'] = render;
+  md.renderer.rules['container_' + name + '_close'] = render;
+};
+
+},{}],3:[function(require,module,exports){
 /**
  * Created by vikram on 9/11/2015.
  */
@@ -746,3 +935,6 @@ Sanscript.t = function (data, from, to, options) {
 };
 
 module.exports = Sanscript;
+
+},{}]},{},[1])(1)
+});

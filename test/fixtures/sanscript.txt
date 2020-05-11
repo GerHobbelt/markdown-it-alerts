@@ -1,0 +1,12 @@
+Basic example:
+.
+::: vtrans devanagari
+  
+  shri rAma rAmeti ||
+  
+:::
+.
+<div class="vtrans vtrans-devanagari">
+<p>श्रि राम रामॆति ॥</p>
+</div>
+.

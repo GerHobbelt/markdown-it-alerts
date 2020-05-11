@@ -1,4 +1,5 @@
 # markdown-it-vtrans
+
 [Markdown-it][markdown-it] plugin for supporting indic scripts via ITRANS.
 
 For example:
@@ -17,9 +18,7 @@ Gets converted to:
 
 ```html
 <div class="vtrans vtrans-devanagari">
-
-  <p> श्री राम रामेति ॥ </p>
-
+<p>श्रि राम रामॆति ॥</p>
 </div>
 ```
 
@@ -29,6 +28,7 @@ Gets converted to:
 ```bash
 $ npm install markdown-it-vtrans --save
 ```
+
 
 
 ## Usage

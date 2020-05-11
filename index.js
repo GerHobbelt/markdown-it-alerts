@@ -1,6 +1,6 @@
 'use strict';
 
-const container = require('markdown-it-container');
+const container = require('@gerhobbelt/markdown-it-container');
 const Sanscript = require('./sanscript');
 
 const isInSanscriptSchemes = vtransScheme => [
@@ -16,11 +16,8 @@ const isInSanscriptSchemes = vtransScheme => [
 ].indexOf(vtransScheme) > -1;
 
 module.exports = function vtrans_plugin(md, options) {
-
   md.use(container, 'vtrans', {
-
     render: function (tokens, idx) {
-
       const openingTag = 1;
       const isOpeningTag = tokens[idx].nesting === openingTag;
       const containerInfo = tokens[idx].info;
@@ -33,15 +30,10 @@ module.exports = function vtrans_plugin(md, options) {
           `${Sanscript.t(tokens[idx].content, 'itrans_dravidian', vtransScheme)}`;
 
         return `<div class="vtrans vtrans-${vtransScheme}">\n`;
-
-      } else {
-
-        return '</div>\n';
-
       }
+      return '</div>\n';
 
     }
-
   });
 
 };
