@@ -1,4 +1,4 @@
-/*! markdown-it-alerts 0.2.0-3 https://github.com//GerHobbelt/markdown-it-alerts @license MIT */
+/*! markdown-it-alerts 0.2.0-4 https://github.com//GerHobbelt/markdown-it-alerts @license MIT */
 
 let container = require('@gerhobbelt/markdown-it-container');
 

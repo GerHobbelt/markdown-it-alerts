@@ -1,6 +1,6 @@
 {
   "name": "@gerhobbelt/markdown-it-alerts",
-  "version": "0.2.0-3",
+  "version": "0.2.0-4",
   "description": "Markdown-it plugin to create Bootstrap alerts",
   "keywords": [
     "markdown-it-plugin",
