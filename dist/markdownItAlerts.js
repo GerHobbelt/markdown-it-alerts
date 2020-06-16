@@ -1,3 +1,6 @@
+/*! markdown-it-alerts 0.2.0-3 https://github.com//GerHobbelt/markdown-it-alerts @license MIT */
+
+'use strict';
 
 let container = require('@gerhobbelt/markdown-it-container');
 
@@ -8,12 +11,14 @@ module.exports = function alerts_plugin(md, options) {
 
   function icon(name) {
     switch (name) {
-    case 'warning':
-      return 'glyphicon glyphicon-alert';
-    case 'danger':
-      return 'glyphicon glyphicon-remove-sign';
-    default:
-      return 'glyphicon glyphicon-info-sign';
+      case 'warning':
+        return 'glyphicon glyphicon-alert';
+
+      case 'danger':
+        return 'glyphicon glyphicon-remove-sign';
+
+      default:
+        return 'glyphicon glyphicon-info-sign';
     }
   }
 
@@ -21,22 +26,27 @@ module.exports = function alerts_plugin(md, options) {
     md.use(container, name, {
       render: function (tokens, idx) {
         let html;
+
         if (tokens[idx].nesting === 1) {
           containerOpenCount += 1;
           html = '<div class="alert alert-' + name + '" role="alert">\n';
+
           if (icons) {
             html += '<div class="alert-inner">\n';
-            html += '<div class="alert-icon"><span class="' + icon(name) +
-              '" aria-hidden="true"></span></div>\n';
+            html += '<div class="alert-icon"><span class="' + icon(name) + '" aria-hidden="true"></span></div>\n';
             html += '<div class="alert-message">';
           }
+
           return html;
         }
+
         containerOpenCount -= 1;
         html = '</div>\n';
+
         if (icons) {
           html += '</div>\n</div>\n';
         }
+
         return html;
       }
     });
@@ -55,7 +65,7 @@ module.exports = function alerts_plugin(md, options) {
 
     md.renderer.rules.link_open = function (tokens, idx, options, env, self) {
       if (isContainerOpen()) {
-        tokens[idx].attrPush([ 'class', 'alert-link' ]);
+        tokens[idx].attrPush(['class', 'alert-link']);
       }
 
       return defaultRender(tokens, idx, options, env, self);
@@ -75,3 +85,4 @@ module.exports = function alerts_plugin(md, options) {
 
   init();
 };
+//# sourceMappingURL=markdownItAlerts.js.map
