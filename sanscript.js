@@ -2,8 +2,6 @@
  * Created by vikram on 9/11/2015.
  */
 
-'use strict';
-
 let Sanscript = function () {};
 
 Sanscript.defaults = {

@@ -11,7 +11,9 @@
   "author": "Prasanna Venkatesh T S <vipranarayan14@gmail.com>",
   "repository": "GerHobbelt/markdown-it-vtrans",
   "license": "MIT",
-  "main": "index.js",
+  "source": "index.js",
+  "main": "dist/markdownItVtrans.js",
+  "module": "dist/markdownItVtrans.mjs",
   "engines": {
     "node": ">=10"
   },
@@ -28,22 +30,19 @@
     "pub": "npm publish --access public"
   },
   "dependencies": {
-    "@gerhobbelt/markdown-it-container": "2.0.1-3"
+    "@gerhobbelt/markdown-it-container": "2.0.1-3",
+    "@sanskrit-coders/sanscript": "^1.1.0"
   },
   "devDependencies": {
-    "@gerhobbelt/markdown-it": "10.0.0-34",
+    "@gerhobbelt/markdown-it": "11.0.0-36",
     "@gerhobbelt/markdown-it-testgen": "0.1.6-7",
-    "browserify": "16.5.1",
+    "@gerhobbelt/prepend-header": "1.0.8-3",
     "chai": "4.2.0",
     "cross-env": "7.0.2",
-    "eslint": "7.0.0",
-    "mocha": "7.1.2",
-    "nyc": "15.0.1",
-    "rollup": "2.9.1",
-    "rollup-plugin-commonjs": "10.1.0",
-    "rollup-plugin-json": "4.0.0",
-    "rollup-plugin-node-resolve": "5.2.0",
-    "terser": "4.6.13"
+    "eslint": "7.2.0",
+    "microbundle": "0.12.1",
+    "mocha": "8.0.1",
+    "nyc": "15.1.0"
   },
   "reporter": [
     "lcov",
