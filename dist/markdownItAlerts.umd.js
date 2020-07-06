@@ -1,4 +1,4 @@
-/*! markdown-it-alerts 0.2.0-4 https://github.com//GerHobbelt/markdown-it-alerts @license MIT */
+/*! markdown-it-alerts 0.2.0-5 https://github.com//GerHobbelt/markdown-it-alerts @license MIT */
 
 (function (factory) {
   typeof define === 'function' && define.amd ? define(factory) :
