@@ -1,7 +1,7 @@
 
-let container = require('@gerhobbelt/markdown-it-container');
+import container from '@gerhobbelt/markdown-it-container';
 
-module.exports = function alerts_plugin(md, options) {
+export default function alerts_plugin(md, options) {
   let containerOpenCount = 0;
   let links = 'links' in (options || {}) ? options.links : true;
   let icons = 'icons' in (options || {}) ? options.icons : false;
@@ -74,4 +74,4 @@ module.exports = function alerts_plugin(md, options) {
   }
 
   init();
-};
+}

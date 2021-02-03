@@ -1,10 +1,8 @@
 /*! markdown-it-alerts 0.2.0-5 https://github.com//GerHobbelt/markdown-it-alerts @license MIT */
 
-'use strict';
+import container from '@gerhobbelt/markdown-it-container';
 
-let container = require('@gerhobbelt/markdown-it-container');
-
-module.exports = function alerts_plugin(md, options) {
+function alerts_plugin(md, options) {
   let containerOpenCount = 0;
   let links = 'links' in (options || {}) ? options.links : true;
   let icons = 'icons' in (options || {}) ? options.icons : false;
@@ -84,5 +82,7 @@ module.exports = function alerts_plugin(md, options) {
   }
 
   init();
-};
-//# sourceMappingURL=markdownItAlerts.js.map
+}
+
+export default alerts_plugin;
+//# sourceMappingURL=markdownItAlerts.modern.js.map
