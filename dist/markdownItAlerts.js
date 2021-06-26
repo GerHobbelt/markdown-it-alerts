@@ -1,4 +1,4 @@
-/*! markdown-it-alerts 0.2.0-6 https://github.com//GerHobbelt/markdown-it-alerts @license MIT */
+/*! markdown-it-alerts 0.2.0-7 https://github.com//GerHobbelt/markdown-it-alerts @license MIT */
 
 import container from '@gerhobbelt/markdown-it-container';
 
