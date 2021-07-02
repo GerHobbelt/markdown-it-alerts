@@ -3,8 +3,8 @@ import container from '@gerhobbelt/markdown-it-container';
 
 export default function alerts_plugin(md, options) {
   let containerOpenCount = 0;
-  let links = 'links' in (options || {}) ? options.links : true;
-  let icons = 'icons' in (options || {}) ? options.icons : false;
+  const links = 'links' in (options || {}) ? options.links : true;
+  const icons = 'icons' in (options || {}) ? options.icons : false;
 
   function icon(name) {
     switch (name) {
@@ -51,7 +51,7 @@ export default function alerts_plugin(md, options) {
   }
 
   function setupLinks() {
-    let defaultRender = md.renderer.rules.link_open || selfRender;
+    const defaultRender = md.renderer.rules.link_open || selfRender;
 
     md.renderer.rules.link_open = function (tokens, idx, options, env, self) {
       if (isContainerOpen()) {
